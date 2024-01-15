@@ -5,10 +5,14 @@ namespace Persistence
 {
     public class DataContext : DbContext
     {
+        public DbSet<Activity> Activities { get; set; }
         public DataContext(DbContextOptions options) : base(options)
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data Source=social_hub.db");
+        }
 
-        public DbSet<Activity> Activities { get; set; }
     }
 }
