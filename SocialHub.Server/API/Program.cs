@@ -35,4 +35,21 @@ app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
+//"using" statement is used to dispose the scope after the code is executed
+//This is a manuel way of garbage collection
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync();
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during migration");
+}
+
+
 app.Run();
