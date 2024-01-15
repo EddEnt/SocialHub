@@ -8,6 +8,5 @@ namespace SocialHub.Server.API.Controllers
     {
         
     }
-    //[Route("api/[controller]")]
 
 }
