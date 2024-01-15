@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Microsoft.Extensions.Logging; // Added missing using statement
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options =>
-{    
+{
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 });
@@ -28,16 +29,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
 //"using" statement is used to dispose the scope after the code is executed
-//This is a manuel way of garbage collection
+//This is a manual way of garbage collection
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
@@ -50,7 +51,7 @@ try
 catch (Exception ex)
 {
     var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "An error occured during migration");
+    logger.LogError(ex, "An error occurred during migration");
 }
 
 

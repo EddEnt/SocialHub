@@ -35,6 +35,30 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
         throw new Error("Could not create certificate.");
     }
 }
+/*
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [plugin()],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url))
+        }
+    },
+    server: {
+        proxy: {
+            '^/api/activities': {
+                target: 'http://localhost:5000',
+                secure: false
+            }
+        },
+        port: 5173,
+        https: {
+            key: fs.readFileSync(keyFilePath),
+            cert: fs.readFileSync(certFilePath),
+        }
+    }
+})
+*/
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -47,7 +71,7 @@ export default defineConfig({
     server: {
         proxy: {
             '^/weatherforecast': {
-                target: 'https://localhost:7092/',
+                target: 'http://localhost:5000/api',
                 secure: false
             }
         },
@@ -58,3 +82,4 @@ export default defineConfig({
         }
     }
 })
+

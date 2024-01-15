@@ -99,6 +99,15 @@ namespace Persistence
                     Category = "film",
                     City = "London",
                     Venue = "Cinema",
+                },
+                new Activity
+                {
+                    Title = "Future Activity 9",
+                    Date = DateTime.UtcNow.AddMonths(9),
+                    Description = "Activity 9 months in future",
+                    Category = "culture",
+                    City = "London",
+                    Venue = "British Museum",
                 }
             };
 
