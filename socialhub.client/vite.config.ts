@@ -35,7 +35,7 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
         throw new Error("Could not create certificate.");
     }
 }
-/*
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
@@ -52,14 +52,14 @@ export default defineConfig({
             }
         },
         port: 5173,
-        https: {
+        /*https: {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
-        }
+        }*/
     }
 })
-*/
 
+/*
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
@@ -82,4 +82,4 @@ export default defineConfig({
         }
     }
 })
-
+*/
