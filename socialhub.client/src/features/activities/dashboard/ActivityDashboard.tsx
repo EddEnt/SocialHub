@@ -9,11 +9,12 @@ interface Props {
     //Props
     activities: Activity[];
     selectedActivity: Activity | undefined;
+    editMode: boolean;
+    submitting: boolean;
 
     //Functions
     selectActivity: (id: string) => void;
     cancelSelectActivity: () => void;
-    editMode: boolean;
     openForm: (id: string) => void;
     closeForm: () => void;
     createOrEdit: (activity: Activity) => void;
@@ -22,7 +23,7 @@ interface Props {
 }
 
 export default function ActivityDashboard({ activities, selectActivity, selectedActivity,
-    deleteActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit }: Props) {
+    deleteActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, submitting }: Props) {
     return (
         <Grid>
             {/* Semantic UI Grid is 16 columns */}
@@ -31,6 +32,7 @@ export default function ActivityDashboard({ activities, selectActivity, selected
                 <ActivityList activities={activities}
                     selectActivity={selectActivity}
                     deleteActivity={deleteActivity}
+                    submitting={submitting}
                 />
             </Grid.Column>
 
@@ -44,7 +46,12 @@ export default function ActivityDashboard({ activities, selectActivity, selected
                         openForm={openForm}
                     />}
                 {editMode &&
-                    <ActivityForm closeForm={closeForm} activity={selectedActivity} createOrEdit={createOrEdit} />}
+                    <ActivityForm
+                        closeForm={closeForm}
+                        activity={selectedActivity}
+                        createOrEdit={createOrEdit}
+                        submitting={submitting}
+                    />}
             </Grid.Column>
         </Grid>
     )
