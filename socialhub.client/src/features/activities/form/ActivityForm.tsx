@@ -1,21 +1,14 @@
-import React, { ChangeEvent } from 'react';
-import { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/activity';
-
-interface Props {
-    //Props
-    activity: Activity | undefined;
-    submitting: boolean;
-
-    //Functions
-    closeForm: () => void;
-    createOrEdit: (activity: Activity) => void;
-}
+import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
 
 //activity: selectedActivity is a shorthand for activity: Activity | undefined
 //Allows us to use the activity variable instead of selectedActivity otherwise we get an error
-export default function ActivityForm({ activity: selectedActivity, closeForm, createOrEdit, submitting }: Props) {
+export default observer( function ActivityForm() {
+
+    const { activityStore } = useStore();
+    const { selectedActivity, closeForm, createActivity, updateActivity, loading } = activityStore;
 
     const initialState = selectedActivity ?? {
         //id is added as an empty string because it is a required field in the model, but users will not be able to see it
@@ -31,7 +24,7 @@ export default function ActivityForm({ activity: selectedActivity, closeForm, cr
     const [activity, setActivityForm] = useState(initialState);
 
     function handleSubmit() {
-        createOrEdit(activity);
+        activity.id ? updateActivity(activity) : createActivity(activity);
     }
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -50,8 +43,8 @@ export default function ActivityForm({ activity: selectedActivity, closeForm, cr
                 <Form.Input placeholder='Venue' value={activity.venue} name='venue' onChange={handleInputChange} />
 
                 <Button onClick={closeForm} floated='left' type='button' content='Cancel' />
-                <Button loading={submitting} floated='right' positive type='submit' content='Submit' />
+                <Button loading={loading} floated='right' positive type='submit' content='Submit' />
             </Form>
         </Segment>
     )
-}
+})
