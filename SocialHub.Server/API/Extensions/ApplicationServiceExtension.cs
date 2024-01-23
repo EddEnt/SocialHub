@@ -3,6 +3,8 @@ using Application.Activities;
 using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 
 namespace SocialHub.Server.API.Extensions
 {
@@ -31,6 +33,9 @@ namespace SocialHub.Server.API.Extensions
             });
             services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<Create>();
 
             return services;
         }
