@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 
 export default observer(function ActivityForm() {
     const { activityStore } = useStore();
-    const { selectedActivity, createActivity, updateActivity,
+    const { createActivity, updateActivity,
         loading, loadActivity, loadingInitial } = activityStore;
     const { id } = useParams();
     const navigate = useNavigate();
@@ -25,6 +25,7 @@ export default observer(function ActivityForm() {
         venue: ''
     });
 
+    //activity! is used to tell TypeScript that activity will not be null
     useEffect(() => {
         if (id) loadActivity(id).then(activity => setActivity(activity!));
     }, [id, loadActivity]);
@@ -43,7 +44,7 @@ export default observer(function ActivityForm() {
         setActivity({ ...activity, [name]: value })
     }
 
-    if (loadingInitial) return <LoadingComponent content='Loading activity...' />
+    if (loadingInitial) return <LoadingComponent content='Loading Activity...' />
 
     return (
         <Segment clearing>

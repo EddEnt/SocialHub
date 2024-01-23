@@ -8,7 +8,7 @@ export default function NavBar() {
         <Menu inverted fixed='top'>
             <Container>
                 <Menu.Item as={NavLink} to='/' header>
-                    <img src="logo.jpg" alt="logo" style={{ marginRight: '8px' }} />
+                    <img src="/logo.jpg" alt="logo" style={{ marginRight: '8px' }} />
                     Social Hub
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/activities' name='Activities' />
