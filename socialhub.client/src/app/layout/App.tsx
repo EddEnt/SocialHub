@@ -3,6 +3,7 @@ import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import { observer } from 'mobx-react-lite';
 import { Outlet, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import HomePage from '../../features/home/HomePage';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
 
     return (
         <>
+            <ToastContainer position='bottom-right' theme="colored" />
             {location.pathname === '/' ? <HomePage /> : (
                 <>
                     <NavBar />

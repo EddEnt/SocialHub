@@ -1,5 +1,6 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Activity } from '../app/models/activity';
+import { toast } from 'react-toastify';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -9,17 +10,36 @@ const sleep = (delay: number) => {
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
-axios.interceptors.response.use(async response => {
-    try {
+axios.interceptors.response.use(async response => {    
         // Generate random delay between 1000 and 2500 milliseconds
         // This is to simulate a slow network, remove this code for production
         const randomDelay = Math.floor(Math.random() * (2500 - 1000 + 1)) + 1000;
         await sleep(randomDelay);
         return response;
-    } catch (error) {
-        console.log(error);
-        return Promise.reject(error);
+
+}, (error: AxiosError) => {
+    const { data, status, config } = error.response!;
+    switch (status) {
+        case 400:
+            toast.error('Bad Request');
+            break;
+        case 401:
+            toast.error('Unauthorised');
+            break;
+        case 403:
+            toast.error('Forbidden');
+            break;
+        case 404:
+            toast.error('Not Found');
+            break;
+        case 500:
+            toast.error('Server Error');
+            break;
+        default:
+            toast.error('Something unexpected went wrong');
+            break;
     }
+    return Promise.reject(error);
 })
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
