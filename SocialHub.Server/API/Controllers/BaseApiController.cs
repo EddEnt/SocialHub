@@ -19,6 +19,10 @@ namespace SocialHub.Server.API.Controllers
 
         protected ActionResult HandleResult<T>(Result<T> result)
         {
+            if (result == null)
+            {
+                return NotFound();
+            }
             if (result.IsSuccessful && result.Value != null)
             {
                 return Ok(result.Value);

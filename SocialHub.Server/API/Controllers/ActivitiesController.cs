@@ -9,14 +9,14 @@ namespace SocialHub.Server.API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
-        [HttpGet] //SocialHub.Server/api/activities
+        [HttpGet]
         public async Task<IActionResult> GetActivities()
         {
             return HandleResult(await Mediator.Send(new List.Query()));
         }
 
-        [HttpGet("{id}")] //SocialHub.Server/api/activities/id
-        public async Task<IActionResult> GetActivity(Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetActivity(Guid id) //By Id
         {           
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
 
@@ -32,17 +32,14 @@ namespace SocialHub.Server.API.Controllers
         public async Task<IActionResult> EditActivity(Guid id, Activity activity)
         {
             activity.Id = id;
-            await Mediator.Send(new Edit.Command { Activity = activity });
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActivity(Guid id)
         {
-            await Mediator.Send(new Delete.Command { Id = id });
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
 
-            return Ok();
         }
 
     }
