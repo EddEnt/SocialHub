@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Activity } from '../app/models/activity';
 import { toast } from 'react-toastify';
+import { router } from './router/Routes';
+import { store } from '../app/stores/store';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -18,10 +20,29 @@ axios.interceptors.response.use(async response => {
         return response;
 
 }, (error: AxiosError) => {
-    const { data, status, config } = error.response!;
+    const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
+
         case 400:
-            toast.error('Bad Request');
+
+            if (config.method === 'get' && Object.prototype.hasOwnProperty.call(data.errors, 'id')) {
+                router.navigate('/not-found');
+            }
+
+            if (data.errors) {
+
+                const modalStateErrors = [];
+                    for (const key in data.errors) {
+                        if (data.errors[key]) {
+                            modalStateErrors.push(data.errors[key])
+                        }
+                    }
+                throw modalStateErrors.flat();
+            }
+            else {
+                toast.error(data);
+            }
+            
             break;
         case 401:
             toast.error('Unauthorised');
@@ -30,10 +51,15 @@ axios.interceptors.response.use(async response => {
             toast.error('Forbidden');
             break;
         case 404:
-            toast.error('Not Found');
+            // If the URL is not found, redirect to the NotFound page
+            //Of note, router.navigate() is marked as unstable in the docs, so this may change in the future
+            //Is not considered to be normal expected usage of the router, but Router devs are still testing it
+            //For now, it works fine
+            router.navigate('/not-found');            
             break;
         case 500:
-            toast.error('Server Error');
+            store.commonStore.setServerError(data);
+            router.navigate('/server-error');
             break;
         default:
             toast.error('Something unexpected went wrong');
