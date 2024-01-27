@@ -4,10 +4,17 @@ using Persistence;
 using SocialHub.Server.API.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+// Requires all endpoints to be authenticated
+builder.Services.AddControllers( options =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
 
 //builder.Services are added to ApplicationServiceExtension.cs and called here
 builder.Services.AddApplicationServices(builder.Configuration);
@@ -29,6 +36,10 @@ app.UseCors("CorsPolicy");
 
 //app.UseHttpsRedirection();
 
+//UseAuthentication must be called before UseAuthorization
+//This is because UseAuthentication adds the authentication middleware to the pipeline
+//UseAuthorization checks what the user is authorized to do
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

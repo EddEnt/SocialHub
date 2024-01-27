@@ -8,6 +8,12 @@ namespace SocialHub.Server.API.Services
 {
     public class TokenService
     {
+        private readonly IConfiguration _configuration;
+        public TokenService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         //Once complete consider switching to Azure Key Vault, once hosting on Azure
         //https://docs.microsoft.com/en-us/azure/key-vault/general/overview
         public string CreateToken(AppUser user)
@@ -17,9 +23,9 @@ namespace SocialHub.Server.API.Services
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email)
-            };
-            //Curent key is temporary, update to be longer before production! <-------
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Y5E)*pWoHPTHL)tNuPY+U-kN*@}X.yciwtZ,2CRGvP]t=Q,jLGU!-x_?M9Ao9h_Z"));
+            };            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _configuration["Users:SecurityKey"]));
 
             //Signing credentials are used to sign the token, using the key and the algorithm
             //HmacSha512Signature is a hashing algorithm that uses the key to hash the token

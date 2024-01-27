@@ -12,6 +12,8 @@ namespace Persistence
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //For now, the database is stored in the project folder
+            //This will be changed later
             optionsBuilder.UseSqlite("Data Source=social_hub.db");
         }
 

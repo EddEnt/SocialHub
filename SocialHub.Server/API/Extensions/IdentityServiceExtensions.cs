@@ -1,6 +1,9 @@
 ﻿using Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using SocialHub.Server.API.Services;
+using System.Text;
 
 namespace SocialHub.Server.API.Extensions
 {
@@ -19,7 +22,22 @@ namespace SocialHub.Server.API.Extensions
                 options.Password.RequiredLength = 10;
 
             }).AddEntityFrameworkStores<DataContext>();
-            services.AddAuthentication();
+
+            //Hardcoded key for now, to be changed later
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Users:SecurityKey"]));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateIssuer = false, //Issuer is the API server
+                        ValidateAudience = false //Audience is the client app
+                    };
+                });
+
 
             services.AddScoped<TokenService>();
 

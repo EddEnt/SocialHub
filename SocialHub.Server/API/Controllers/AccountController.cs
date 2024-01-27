@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialHub.Server.API.DTOs;
@@ -8,6 +9,8 @@ namespace SocialHub.Server.API.Controllers
 {
     //Treating this a its own service, keeping it as seperate from the rest of the API as possible
 
+    //AllowAnonymous attribute allows the user to access the login page without being authenticated
+    [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
     public class AccountController(UserManager<AppUser> userManager, TokenService tokenService ) : ControllerBase
