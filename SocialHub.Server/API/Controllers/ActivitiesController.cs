@@ -1,14 +1,15 @@
 ﻿using Application.Activities;
 using Domain;
-using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace SocialHub.Server.API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
+        //TEMPORARY - REMOVE LATER ONCE USER AUTHENTICATION AND LOGIN IS IMPLEMENTED
+        //[AllowAnonymous]
+        //^-----------------------------------------------------------------^
         [HttpGet]
         public async Task<IActionResult> GetActivities()
         {

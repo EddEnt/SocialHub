@@ -49,16 +49,19 @@ namespace SocialHub.Server.API.Controllers
         {
             if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
             {
-                return BadRequest("Username is already in use");
+                ModelState.AddModelError("username", "Username is already in use");
+                return ValidationProblem();
             }
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.EmailAddress))
             {
-                return BadRequest("Email address is already in use");
+                ModelState.AddModelError("emailAddress", "Email Address is already in use");
+                return ValidationProblem();
             }
 
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
+                //Email is from Microsoft.AspNetCore.Identity, EmailAddress is from RegisterDto                
                 Email = registerDto.EmailAddress,
                 UserName = registerDto.Username
             };
@@ -70,7 +73,6 @@ namespace SocialHub.Server.API.Controllers
                 return CreateUserObject(user);
             }
             return BadRequest(result.Errors);
-
         }
         
         [HttpGet]
