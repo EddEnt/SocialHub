@@ -16,9 +16,10 @@ builder.Services.AddControllers( options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 
-//builder.Services are added to ApplicationServiceExtension.cs and called here
+//builder.Services are added to API/Extensions/ApplicationServiceExtension.cs and called here
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
+
 
 var app = builder.Build();
 

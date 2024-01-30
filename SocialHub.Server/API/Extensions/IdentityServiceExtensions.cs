@@ -21,6 +21,8 @@ namespace SocialHub.Server.API.Extensions
                 options.Password.RequireLowercase = true;
                 options.Password.RequiredLength = 10;
 
+                options.User.RequireUniqueEmail = true;
+
             }).AddEntityFrameworkStores<DataContext>();
 
             //Hardcoded key for now, to be changed later
