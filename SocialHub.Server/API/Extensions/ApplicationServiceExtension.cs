@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using Application.Interfaces;
+using Infrastructure.Security;
 
 namespace SocialHub.Server.API.Extensions
 {
@@ -36,6 +38,9 @@ namespace SocialHub.Server.API.Extensions
 
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<Create>();
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }
