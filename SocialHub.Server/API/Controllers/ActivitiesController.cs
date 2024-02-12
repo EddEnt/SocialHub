@@ -1,15 +1,12 @@
 ﻿using Application.Activities;
 using Domain;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SocialHub.Server.API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
-        //TEMPORARY - REMOVE LATER ONCE USER AUTHENTICATION AND LOGIN IS IMPLEMENTED
-        //[AllowAnonymous]
-        //^-----------------------------------------------------------------^
+        
         [HttpGet]
         public async Task<IActionResult> GetActivities()
         {
@@ -17,7 +14,7 @@ namespace SocialHub.Server.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetActivity(Guid id) //By Id
+        public async Task<IActionResult> GetActivity(Guid id)
         {           
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
 
