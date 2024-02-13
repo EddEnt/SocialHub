@@ -46,24 +46,6 @@ namespace Persistence.Migrations
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("Domain.ActivityAttendee", b =>
-                {
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ActivityId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsHost")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("AppUserId", "ActivityId");
-
-                    b.HasIndex("ActivityId");
-
-                    b.ToTable("ActivityAttendees");
-                });
-
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -262,25 +244,6 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.ActivityAttendee", b =>
-                {
-                    b.HasOne("Domain.Activity", "Activity")
-                        .WithMany("Attendees")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AppUser", "AppUser")
-                        .WithMany("Activities")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("AppUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -330,16 +293,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Activity", b =>
-                {
-                    b.Navigation("Attendees");
-                });
-
-            modelBuilder.Entity("Domain.AppUser", b =>
-                {
-                    b.Navigation("Activities");
                 });
 #pragma warning restore 612, 618
         }
