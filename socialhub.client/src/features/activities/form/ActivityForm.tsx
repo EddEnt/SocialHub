@@ -12,26 +12,18 @@ import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { categoryOptions } from '../../../app/common/options/categoryOptions';
 import MyDateInput from '../../../app/common/form/MyDateInput';
-import { Activity } from '../../../app/models/activity';
+import { ActivityFormValues } from '../../../app/models/activity';
 
 export default observer(function ActivityForm() {
     const { activityStore } = useStore();
     const { createActivity, updateActivity,
-        loading, loadActivity, loadingInitial } = activityStore;
+        loadActivity, loadingInitial } = activityStore;
     const { id } = useParams();
     const navigate = useNavigate();
 
     //id is added as an empty string because it is a required field in the model, 
     //but users will not be able to see it
-    const [activity, setActivity] = useState < Activity>({
-        id: '',
-        title: '',
-        category: '',
-        description: '',
-        date: null,
-        city: '',
-        venue: ''
-    });
+    const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
     const validationSchema = Yup.object({
         title: Yup.string().required('The activity title is required'),
@@ -44,13 +36,19 @@ export default observer(function ActivityForm() {
 
     //activity! is used to tell TypeScript that activity will not be null
     useEffect(() => {
-        if (id) loadActivity(id).then(activity => setActivity(activity!));
+        if (id) {
+            loadActivity(id)
+                .then(activity => setActivity(new ActivityFormValues(activity)))
+        }
     }, [id, loadActivity]);
 
-    function handleFormSubmit(activity: Activity) {
+    function handleFormSubmit(activity: ActivityFormValues) {
         if (!activity.id) {
-            activity.id = uuid();
-            createActivity(activity).then(() => navigate(`/activities/${activity.id}`))
+                let newActivity = {
+                ...activity,
+                id: uuid()
+            };
+            createActivity(newActivity).then(() => navigate(`/activities/${newActivity.id}`))
         } else {
             updateActivity(activity).then(() => navigate(`/activities/${activity.id}`))
         }
@@ -88,7 +86,7 @@ export default observer(function ActivityForm() {
                         <Button as={Link} to='/activities' floated='left' type='button' content='Cancel' />
                         <Button
                             disabled={isSubmitting || !dirty || !isValid}
-                            loading={loading}
+                            loading={isSubmitting}
                             floated='right'
                             positive type='submit'
                             content='Submit' />
